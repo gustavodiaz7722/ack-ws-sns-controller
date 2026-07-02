@@ -77,6 +77,8 @@ resources:
         is_attribute: true
       TracingConfig:
         is_attribute: true
+      DataProtectionPolicy:
+        is_document: true
       DeliveryPolicy:
         is_attribute: true
         is_document: true
