@@ -114,3 +114,17 @@ def get_tags(topic_arn):
         return resp['Tags']
     except c.exceptions.ResourceNotFoundException:
         return None
+
+
+def get_data_protection_policy(topic_arn):
+    """Returns the data protection policy document for the topic with a
+    supplied ARN from the SNS GetDataProtectionPolicy API.
+
+    If no such Topic exists, returns None.
+    """
+    c = boto3.client('sns')
+    try:
+        resp = c.get_data_protection_policy(ResourceArn=topic_arn)
+        return resp.get('DataProtectionPolicy')
+    except c.exceptions.NotFoundException:
+        return None

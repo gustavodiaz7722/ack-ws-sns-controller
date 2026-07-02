@@ -80,7 +80,7 @@ func newResourceDelta(
 	if ackcompare.HasNilDifference(a.ko.Spec.DataProtectionPolicy, b.ko.Spec.DataProtectionPolicy) {
 		delta.Add("Spec.DataProtectionPolicy", a.ko.Spec.DataProtectionPolicy, b.ko.Spec.DataProtectionPolicy)
 	} else if a.ko.Spec.DataProtectionPolicy != nil && b.ko.Spec.DataProtectionPolicy != nil {
-		if *a.ko.Spec.DataProtectionPolicy != *b.ko.Spec.DataProtectionPolicy {
+		if equal, err := ackcompare.DocumentEqual(*a.ko.Spec.DataProtectionPolicy, *b.ko.Spec.DataProtectionPolicy); err != nil || !equal {
 			delta.Add("Spec.DataProtectionPolicy", a.ko.Spec.DataProtectionPolicy, b.ko.Spec.DataProtectionPolicy)
 		}
 	}

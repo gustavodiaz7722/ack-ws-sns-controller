@@ -187,6 +187,25 @@ class TestTopic:
         time.sleep(MODIFY_WAIT_AFTER_SECONDS)
         assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=5)
 
+        # Verify the dataProtectionPolicy set on create is reflected server-side
+        # and update it to a different document to exercise the is_document
+        # comparison path.
+        latest_dpp = topic.get_data_protection_policy(topic_arn)
+        assert latest_dpp is not None
+        assert "EmailAddress" in latest_dpp
+
+        updated_data_protection_policy = '{"Name":"data-protection-policy","Version":"2021-06-01","Statement":[{"Sid":"deny-inbound-ssn","DataDirection":"Inbound","Principal":["*"],"DataIdentifier":["arn:aws:dataprotection::aws:data-identifier/Ssn-US"],"Operation":{"Deny":{}}}]}'
+        updates = {
+            "spec": {"dataProtectionPolicy": updated_data_protection_policy},
+        }
+        k8s.patch_custom_resource(ref, updates)
+        time.sleep(MODIFY_WAIT_AFTER_SECONDS)
+        assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=5)
+
+        latest_dpp = topic.get_data_protection_policy(topic_arn)
+        assert latest_dpp is not None
+        assert "Ssn-US" in latest_dpp
+
         # Same update code path check for tags...
         latest_tags = topic.get_tags(topic_arn)
         expect_before_update_tags = [
