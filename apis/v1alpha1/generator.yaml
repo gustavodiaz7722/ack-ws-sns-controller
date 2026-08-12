@@ -225,6 +225,10 @@ resources:
           path: Status.ACKResourceMetadata.ARN
       EventDeliveryFailure:
         is_attribute: true
+        type: string
+        references:
+          resource: Topic
+          path: Status.ACKResourceMetadata.ARN
       SuccessFeedbackRoleArn:
         is_attribute: true
         type: string
@@ -252,6 +256,10 @@ resources:
         is_attribute: true
       Enabled:
         is_attribute: true
+      PlatformApplicationArn:
+        references:
+          resource: PlatformApplication
+          path: Status.ACKResourceMetadata.ARN
       Token:
         is_attribute: true
     tags:

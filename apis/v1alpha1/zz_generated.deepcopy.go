@@ -202,6 +202,11 @@ func (in *PlatformApplicationSpec) DeepCopyInto(out *PlatformApplicationSpec) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.EventDeliveryFailureRef != nil {
+		in, out := &in.EventDeliveryFailureRef, &out.EventDeliveryFailureRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.EventEndpointCreated != nil {
 		in, out := &in.EventEndpointCreated, &out.EventEndpointCreated
 		*out = new(string)
@@ -432,6 +437,11 @@ func (in *PlatformEndpointSpec) DeepCopyInto(out *PlatformEndpointSpec) {
 		in, out := &in.PlatformApplicationARN, &out.PlatformApplicationARN
 		*out = new(string)
 		**out = **in
+	}
+	if in.PlatformApplicationRef != nil {
+		in, out := &in.PlatformApplicationRef, &out.PlatformApplicationRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Token != nil {
 		in, out := &in.Token, &out.Token
